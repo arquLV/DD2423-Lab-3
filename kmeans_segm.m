@@ -10,7 +10,7 @@ if nargin > 3
 end
 
 %centers = randi([0,255], K, 3); % K random RGB centers
-centers = double(pixels(randperm(W*H,K),:));
+centers = pixels(randperm(W*H,K),:);
 
 for i = 1:L
     distances = pdist2(pixels, centers); % (W*H, K)
