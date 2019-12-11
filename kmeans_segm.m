@@ -1,8 +1,12 @@
 function [segmentation, centers] = kmeans_segm(image, K, L, seed)
 % image : (H,W,3)
-[H,W,~] = size(image);
-
-pixels = double(reshape(image, W*H, 3));
+if ndims(image) > 2
+    [H,W,~] = size(image);
+    pixels = double(reshape(image, W*H, 3));
+else
+    pixels = image;
+end
+num_pixels = size(pixels, 1);
 % disp(size(pixels));
 
 if nargin > 3
@@ -10,7 +14,8 @@ if nargin > 3
 end
 
 %centers = randi([0,255], K, 3); % K random RGB centers
-centers = pixels(randperm(W*H,K),:);
+disp(num_pixels);
+centers = pixels(randperm(num_pixels,K),:);
 
 for i = 1:L
     distances = pdist2(pixels, centers); % (W*H, K)
@@ -26,5 +31,7 @@ for i = 1:L
     end
 end
 
-segmentation = reshape(segmentation, H, W);
+if ndims(image) > 2
+    segmentation = reshape(segmentation, H, W);
+end
 end
